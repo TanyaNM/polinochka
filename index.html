@@ -122,85 +122,113 @@
         </div>
     </div>
  <script>
-    let isPromoApplied = false;
+        let isPromoApplied = false;
 
-    // Показати поле для вводу промокоду
-    document.getElementById('promo-code-button').addEventListener('click', function() {
-        document.getElementById('promo-code-input-container').style.display = 'block';
-    });
+        // Показати поле для вводу промокоду
+        document.getElementById('promo-code-button').addEventListener('click', function() {
+            document.getElementById('promo-code-input-container').style.display = 'block';
+        });
 
-    // Застосування промокоду
-    document.getElementById('apply-promo-code').addEventListener('click', function() {
-        const promoCode = document.getElementById('promo-code-input').value.trim();
-        if (promoCode === 'polinochka') {
-            isPromoApplied = true;
-            document.querySelectorAll('.carousel-item').forEach(item => {
-                const priceElement = item.querySelector('.price');
-                const discountElement = item.querySelector('.discount-price');
-                const originalPrice = parseFloat(priceElement.textContent);
-                const discountedPrice = (originalPrice * 0.9).toFixed(2);
-
-                discountElement.style.display = 'block';
-                discountElement.querySelector('.discount').textContent = discountedPrice;
-            });
-            updateCartTotal();
-            alert('Промокод застосовано!');
-        } else {
-            alert('Невірний промокод');
-        }
-    });
-
-    // Додавання до корзини
-    const cartItemsContainer = document.querySelector('.cart-items');
-    const cart = {}; // Об'єкт для зберігання товарів у кошику
-
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
-            const name = this.getAttribute('data-name');
-            const price = parseFloat(this.getAttribute('data-price'));
-            const discountedPrice = isPromoApplied ? (price * 0.9).toFixed(2) : price;
-
-            // Якщо товар вже у кошику, збільшуємо кількість
-            if (cart[name]) {
-                cart[name].quantity += 1;
+        // Застосування промокоду
+        document.getElementById('apply-promo-code').addEventListener('click', function() {
+            const promoCode = document.getElementById('promo-code-input').value.trim();
+            if (promoCode === 'polinochka') {
+                isPromoApplied = true;
+                alert('Промокод застосовано!');
             } else {
-                cart[name] = {
-                    price: price,
-                    discountedPrice: discountedPrice,
-                    quantity: 1
-                };
+                alert('Невірний промокод');
             }
-
-            renderCart();
             updateCartTotal();
         });
-    });
 
-    // Відображення товарів у кошику
-    function renderCart() {
-        cartItemsContainer.innerHTML = ''; // Очистити вміст перед оновленням
-        for (const [name, item] of Object.entries(cart)) {
-            const cartItem = document.createElement('div');
-            cartItem.textContent = `${name} - ${item.price} грн x ${item.quantity}` +
-                (isPromoApplied ? ` (зі знижкою: ${(item.discountedPrice * item.quantity).toFixed(2)} грн)` : '');
-            cartItemsContainer.appendChild(cartItem);
+        // Додавання до корзини
+        const cartItemsContainer = document.querySelector('.cart-items');
+        const cart = {}; // Об'єкт для зберігання товарів у кошику
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', function() {
+                const name = this.getAttribute('data-name');
+                const price = parseFloat(this.getAttribute('data-price'));
+                const discountedPrice = isPromoApplied ? (price * 0.9).toFixed(2) : price;
+
+                if (cart[name]) {
+                    cart[name].quantity += 1;
+                } else {
+                    cart[name] = {
+                        price: price,
+                        discountedPrice: discountedPrice,
+                        quantity: 1
+                    };
+                }
+
+                renderCart();
+                updateCartTotal();
+            });
+        });
+
+        // Видалення товару з корзини
+        function removeFromCart(name) {
+            delete cart[name];
+            renderCart();
+            updateCartTotal();
         }
-    }
 
-    // Оновлення загальної суми в корзині
-    function updateCartTotal() {
-        let total = 0;
-        let totalDiscounted = 0;
-
-        for (const item of Object.values(cart)) {
-            total += item.price * item.quantity;
-            totalDiscounted += item.discountedPrice * item.quantity;
+        // Відображення товарів у кошику
+        function renderCart() {
+            cartItemsContainer.innerHTML = '';
+            for (const [name, item] of Object.entries(cart)) {
+                const cartItem = document.createElement('div');
+                cartItem.innerHTML = `
+                    ${name} - ${item.price} грн x ${item.quantity}
+                    ${isPromoApplied ? `(зі знижкою: ${(item.discountedPrice * item.quantity).toFixed(2)} грн)` : ''}
+                    <button onclick="removeFromCart('${name}')">Видалити</button>
+                `;
+                cartItemsContainer.appendChild(cartItem);
+            }
         }
 
-        document.querySelector('.cart-total').textContent = total.toFixed(2);
-        document.querySelector('.cart-discount-total').textContent = totalDiscounted.toFixed(2);
-    }
-</script>
+        // Оновлення загальної суми в корзині
+        function updateCartTotal() {
+            let total = 0;
+            let totalDiscounted = 0;
+
+            for (const item of Object.values(cart)) {
+                total += item.price * item.quantity;
+                totalDiscounted += item.discountedPrice * item.quantity;
+            }
+
+            document.querySelector('.cart-total').textContent = total.toFixed(2);
+            document.querySelector('.cart-discount-total').textContent = totalDiscounted.toFixed(2);
+        }
+
+        // Карусель перемикання товарів
+        const track = document.querySelector('.carousel-track');
+        const leftArrow = document.querySelector('.arrow.left');
+        const rightArrow = document.querySelector('.arrow.right');
+
+        let currentIndex = 0;
+
+        function updateCarousel() {
+            const width = document.querySelector('.carousel').offsetWidth;
+            track.style.transform = `translateX(-${currentIndex * width}px)`;
+        }
+
+        leftArrow.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex -= 1;
+                updateCarousel();
+            }
+        });
+
+        rightArrow.addEventListener('click', () => {
+            const itemsCount = document.querySelectorAll('.carousel-item').length;
+            if (currentIndex < itemsCount - 1) {
+                currentIndex += 1;
+                updateCarousel();
+            }
+        });
+
+    </script>
 <script src="script.js"></script>
 </body>
 </html>
