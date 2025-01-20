@@ -1,4 +1,4 @@
- const track = document.querySelector('.carousel-track');
+        const track = document.querySelector('.carousel-track');
         const items = document.querySelectorAll('.carousel-item');
         const leftButton = document.querySelector('.left');
         const rightButton = document.querySelector('.right');
