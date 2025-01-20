@@ -1,0 +1,116 @@
+  body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fbeaf3;
+        }
+
+        .header{
+            text-align: center;
+            background-color: #ffd1dc;
+            padding: 20px;
+        }
+
+        .header h1 {
+            color: #ff69b4;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .carousel {
+            display: flex;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-item {
+            min-width: 50%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .carousel-item img {
+            max-width: 50%;
+            border-radius: 10px;
+        }
+
+        .controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .arrow {
+            background-color: #ff69b4;
+            border: none;
+            color: white;
+            font-size: 18px;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .arrow:hover {
+            background-color: #ff3e96;
+        }
+       .cart {
+            
+            bottom:0px;
+            right: 20px;
+            background: #f0cdcd;
+            border: 3px solid #f7b1b1;
+            padding: 15px;
+            width: 100%;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .cart h2 {
+            margin-top: 0;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .cart-item button {
+            margin-left: 10px;
+        }
+        .carousel-item button {
+            display: block;
+            margin: 10px 0 0;
+        
+        }
+     .add-to-cart{
+   background-color: #fac6e0;
+   border: 3px solid rgb(252, 163, 247)
+     }
+  
+       
+ 
+   .carousel-item img:hover{
+      padding: 20px;
+  box-shadow:
+  inset 0 -3em 3em rgba(238, 84, 84, 0.3),
+    0 0 0 2px white,
+    0.3em 0.3em 1em rgba(78, 15, 15, 0.6);
+   }
+           .promo-code-section {
+            margin: 20px 0;
+        }
+        .discount-price {
+            color: green;
+            font-weight: bold;
+            margin-top: 5px;
+        }
